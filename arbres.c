@@ -247,6 +247,7 @@ void arbre_inserer_racine(arbre a, void *val) {
 void arbre_ajouter_filsgauche_courant(arbre a, void *val) {
   assert(a != NULL);
   assert(val != NULL);
+  noeud_ajouter_filsgauche(a->courant, val, a->copier);
 }
 
 // On ajoute un frere droit à partir de courant
