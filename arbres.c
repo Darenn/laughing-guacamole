@@ -188,6 +188,9 @@ arbre arbre_creer(void (*_copier)(void *val, void **pt),
   arbre a = (arbre)malloc(sizeof(struct arbre_struct));
   a->racine = NULL;
   a->courant = NULL;
+  a->copier = _copier;
+  a->afficher = _afficher;
+  a->detruire = _detruire;
   return a;
 }
 
