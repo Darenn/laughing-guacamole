@@ -192,7 +192,10 @@ arbre arbre_creer(void (*_copier)(void *val, void **pt),
 }
 
 // Destruction compléte de l'arbre
-void arbre_detruire(arbre *a) { assert(a != NULL); }
+void arbre_detruire(arbre *a) {
+  assert(a != NULL);
+  noeud_detruire(&(*a)->racine, (*a)->detruire);
+}
 
 // Initialisation de courant à la tete de l'arbre
 void arbre_init_courant(arbre a) { assert(a != NULL); }
