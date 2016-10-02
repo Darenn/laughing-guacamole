@@ -1,0 +1,26 @@
+<racine>
+  <fille1>
+    <petitefille11>
+      <a>
+      </a>
+      <b>
+      </b>
+      <c>
+      </c>
+    </petitefille11>
+    <petitefille12>
+      <a>
+      </a>
+      <b>
+      </b>
+      <c>
+      </c>
+    </petitefille12>
+  </fille1>
+  <fille2>
+    <petitefille21>
+      <petitepetitefille211>
+      </petitepetitefille211>
+    </petitefille21>
+  </fille2>
+</racine>

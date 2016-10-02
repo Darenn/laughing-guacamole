@@ -1,0 +1,23 @@
+racine
+fille1
+pfille1
+a
+b
+pfille2
+c
+fille2
+fille3
+
+arbre extrait : 
+fille1
+pfille1
+a
+b
+pfille2
+c
+
+arbre restant : 
+racine
+fille2
+fille3
+
