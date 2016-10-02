@@ -222,7 +222,10 @@ bool arbre_courant_sans_filsgauche(arbre a) {
 }
 
 // On déplace courant sur son frere droit
-void arbre_courant_freredroit(arbre a) { assert(a != NULL); }
+void arbre_courant_freredroit(arbre a) {
+  assert(a != NULL);
+  a->courant = a->courant->freredroit;
+}
 
 // affichage de l'arbre avec un passage à la ligne en fin
 void arbre_afficher(arbre a, FILE *f) {
