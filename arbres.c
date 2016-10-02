@@ -5,6 +5,13 @@
 
 #include "arbres.h"
 
+/*!
+* \struct noeud_struct arbres.h noeud
+* \brief Représente un noeud d'un arbre.
+* Contient un pointeur vers son père, son fils gauche (son noeud fils le plus à
+* gauche) et vers son frere droit (un noeud frère a le même père, le frère droit
+* est directement à droite du noeud).
+*/
 struct noeud_struct {
   void *val;
   noeud pere;
@@ -12,6 +19,10 @@ struct noeud_struct {
   noeud freredroit;
 };
 
+/*!
+* \brief Créer un noeud vide (attributs à NULL) et le retourne.
+* \return Un noeud vide.
+*/
 noeud noeud_creer_vide() {
   noeud n = (noeud)malloc(sizeof(struct noeud_struct));
   n->val = NULL;
@@ -21,6 +32,13 @@ noeud noeud_creer_vide() {
   return n;
 }
 
+/*!
+* \brief Créer un noeud avec pour valeur val.
+* \param val La valeur du noeud.
+* \param Un pointeur vers une fonction permettant de copier un valeur.
+* \return Un noeud avec pour valeur val.
+* \pre Les paramètres doivent être définis.
+*/
 noeud noeud_creer(void *val, void (*copier)(void *val, void **ptr)) {
   assert(val != NULL);
   assert(copier != NULL);
@@ -32,6 +50,13 @@ noeud noeud_creer(void *val, void (*copier)(void *val, void **ptr)) {
   return n;
 }
 
+/*!
+* \brief Créer un noeud avec pour valeur val, qui devient le fils gauche de n.
+* \param n Le noeud auquel on veut ajouter le fils à gauche.
+* \param val La valeur que prendra le fils gauche.
+* \param copier Un pointeur vers une fonction qui permet de copier une valeur.
+* \pre Les paramètres doivent être définis.
+*/
 void noeud_ajouter_filsgauche(noeud n, void *val,
                               void (*copier)(void *val, void **ptr)) {
   assert(NULL != n);
@@ -42,6 +67,14 @@ void noeud_ajouter_filsgauche(noeud n, void *val,
   n->filsgauche = fg;
 }
 
+/*!
+* \brief Créer un noeud avec pour valeur val, qui devient le frere droit du
+* frere le plus à droite de n.
+* \param n Le noeud auquel on veut ajouter le frere le plus à droite.
+* \param val La valeur que prendra le frere droit.
+* \param copier Un pointeur vers une fonction qui permet de copier une valeur.
+* \pre Les paramètres doivent être définis.
+*/
 void noeud_ajouter_freredroit(noeud n, void *val,
                               void (*copier)(void *val, void **ptr)) {
   assert(NULL != n);
@@ -53,6 +86,14 @@ void noeud_ajouter_freredroit(noeud n, void *val,
   n->freredroit = fd;
 }
 
+/*!
+* \brief Créer un noeud avec pour valeur val, qui devient le fils le plus à
+* droite de n.
+* \param n Le noeud auquel on veut ajouter le frere à droite.
+* \param val La valeur que prendra le frere droit.
+* \param copier Un pointeur vers une fonction qui permet de copier une valeur.
+* \pre Les paramètres doivent être définis.
+*/
 void noeud_ajouter_fils(noeud n, void *val,
                         void (*copier)(void *val, void **ptr)) {
   assert(NULL != n);
@@ -63,6 +104,15 @@ void noeud_ajouter_fils(noeud n, void *val,
     noeud_ajouter_freredroit(n->filsgauche, val, copier);
 }
 
+/*!
+* \brief Affiche le sous-arbre ayant pour racine le noeud n sur le flux f avec
+* la fonction afficher.
+* \param n Le noeud qui sera la racine du sous-arbre que l'on souhaite afficher.
+* \param afficher Un pointeur vers une fonction qui affiche une valeur sur un
+* flux.
+* \param f Le flux sur lequel afficher le sous-arbre.
+* \pre Les paramètres afficher et f doivent être définis.
+*/
 void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f) {
   assert(afficher != NULL);
   assert(f != NULL);
@@ -73,6 +123,12 @@ void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f) {
   }
 }
 
+/*!
+* \brief Détruit tout les noeuds du sous-arbre ayant pour racine le noeud n.
+* \param n Le noeud racine du sous-arbre que l'on veut détruire.
+* \param detruire Un pointeur vers une fonction qui détruit une valeur.
+* \pre detruire être défini.
+*/
 void noeud_detruire(noeud *n, void(detruire)(void **val)) {
   assert(detruire != NULL);
   if ((*n) != NULL) {
@@ -84,6 +140,16 @@ void noeud_detruire(noeud *n, void(detruire)(void **val)) {
   }
 }
 
+/*!
+* \brief Recherche un noeud avec pour valeur val dans le sous-arbre de racine n
+* en suivant un parcours prefixe.
+* \param n Le noeud racine du sous-arbre dans le lequel on recherche la valeur.
+* \param val La valeur recherchée.
+* \param est_egal Un pointeur vers une fonction qui indique si deux valeurs sont
+* égales.
+* \pre val et est_egal doivent être définis.
+* \return Un sous-arbre ayant pour racine un noeud avec pour valeur val.
+*/
 noeud noeud_rechercher(noeud n, void *val,
                        bool (*est_egal)(void *val1, void *val2)) {
   assert(val != NULL);
