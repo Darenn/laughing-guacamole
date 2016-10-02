@@ -255,6 +255,7 @@ void arbre_ajouter_filsgauche_courant(arbre a, void *val) {
 void arbre_ajouter_freredroit_courant(arbre a, void *val) {
   assert(a != NULL);
   assert(val != NULL);
+  noeud_ajouter_freredroit(a->courant, val, a->copier);
 }
 
 // On ajoute un fils soit comme fils gauche s'il n'existe pas
