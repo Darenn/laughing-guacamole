@@ -204,7 +204,10 @@ void arbre_init_courant(arbre a) {
 }
 
 // On déplace courant sur son fils gauche
-void arbre_courant_filsgauche(arbre a) { assert(a != NULL); }
+void arbre_courant_filsgauche(arbre a) {
+  assert(a != NULL);
+  a->courant = a->courant->filsgauche;
+}
 
 // On déplace courant sur son père
 void arbre_courant_pere(arbre a) { assert(a != NULL); }
