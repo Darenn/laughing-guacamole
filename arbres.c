@@ -263,6 +263,7 @@ void arbre_ajouter_freredroit_courant(arbre a, void *val) {
 void arbre_ajouter_fils_courant(arbre a, void *val) {
   assert(a != NULL);
   assert(val != NULL);
+  noeud_ajouter_fils(a->courant, val, a->copier);
 }
 
 // on extrait l'arbre à partir du noeud n qui contient la valeur recherchée
