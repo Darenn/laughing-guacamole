@@ -231,6 +231,8 @@ void arbre_courant_freredroit(arbre a) {
 void arbre_afficher(arbre a, FILE *f) {
   assert(a != NULL);
   assert(f != NULL);
+  noeud_afficher(a->racine, a->afficher, f);
+  fprintf(f, "\n");
 }
 
 // On insère une racine (nouvelle ou pas) à l'arbre
