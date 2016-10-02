@@ -17,8 +17,8 @@ void noeud_ajouter_freredroit(noeud n, void *val,
 
 void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f);
 
-noeud noeud_rechercher(noeud n, void *val,
-                       bool (*est_egal)(void *val1, void *val2));
+noeud *noeud_rechercher(noeud *n, void *val,
+                        bool (*est_egal)(void *val1, void *val2));
 
 typedef struct arbre_struct *arbre;
 

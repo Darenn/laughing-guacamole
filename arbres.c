@@ -141,30 +141,31 @@ void noeud_detruire(noeud *n, void(detruire)(void **val)) {
 }
 
 /*!
-* \brief Recherche un noeud avec pour valeur val dans le sous-arbre de racine n
-* en suivant un parcours prefixe.
-* \param n Le noeud racine du sous-arbre dans le lequel on recherche la valeur.
+* \brief Recherche un noeud avec pour valeur val dans le sous-arbre ayant pour
+* racine le noeud pointé par n en suivant un parcours prefixe.
+* \param n Un pointeur vers le noeud racine du sous-arbre dans le lequel on
+* recherche la valeur.
 * \param val La valeur recherchée.
 * \param est_egal Un pointeur vers une fonction qui indique si deux valeurs sont
 * égales.
 * \pre val et est_egal doivent être définis.
-* \return Un sous-arbre ayant pour racine un noeud avec pour valeur val.
+* \return Un pointeur vers le noeud racine ayant pour valeur val du sous-arbre.
 */
-noeud noeud_rechercher(noeud n, void *val,
-                       bool (*est_egal)(void *val1, void *val2)) {
+noeud *noeud_rechercher(noeud *n, void *val,
+                        bool (*est_egal)(void *val1, void *val2)) {
   assert(val != NULL);
   assert(est_egal != NULL);
-  if (n == NULL)
-    return NULL;
+  if (*n == NULL)
+    return (noeud *)NULL;
   else {
-    if (est_egal(n->val, val))
+    if (est_egal((*n)->val, val))
       return n;
     else {
-      noeud valg = noeud_rechercher(n->filsgauche, val, est_egal);
+      noeud *valg = noeud_rechercher(&(*n)->filsgauche, val, est_egal);
       if (valg != NULL)
         return valg;
       else
-        return noeud_rechercher(n->freredroit, val, est_egal);
+        return noeud_rechercher(&(*n)->freredroit, val, est_egal);
     }
   }
 }
@@ -197,7 +198,9 @@ arbre arbre_creer(void (*_copier)(void *val, void **pt),
 // Destruction compléte de l'arbre
 void arbre_detruire(arbre *a) {
   assert(a != NULL);
-  noeud_detruire(&(*a)->racine, (*a)->detruire);
+  noeud_detruire(&((*a)->racine), (*a)->detruire);
+  free(*a);
+  a = NULL;
 }
 
 // Initialisation de courant à la tete de l'arbre
@@ -287,7 +290,7 @@ arbre arbre_extraction(arbre a, void *val,
   assert(a != NULL);
   assert(val != NULL);
   assert(est_egal != NULL);
-  noeud noeudRecherche = noeud_rechercher(a->racine, val, est_egal);
+  noeud *noeudRecherche = noeud_rechercher(&(a)->racine, val, est_egal);
   arbre arbreExtrait = NULL;
   if (noeudRecherche != NULL) {
     // Je créé un nouveau pointeur de struct_noeud (racine de arbre extrait),
@@ -295,11 +298,11 @@ arbre arbre_extraction(arbre a, void *val,
     // le pointeur vers le noeud recherché à NULL pour que l'arbre de base n'ai
     // plus de référence vers lui
     arbreExtrait = arbre_creer(a->copier, a->afficher, a->detruire);
-    arbreExtrait->racine = (noeud)malloc(sizeof(struct noeud_struct));
-    *(arbreExtrait->racine) = *noeudRecherche;
-    noeudRecherche = NULL;
+    // arbreExtrait->racine = (noeud)malloc(sizeof(struct noeud_struct));
+    arbreExtrait->racine = *noeudRecherche;
+    *noeudRecherche = NULL;
+    arbre_init_courant(arbreExtrait);
   }
-  arbre_init_courant(arbreExtrait);
   arbre_init_courant(a);
   return arbreExtrait;
 }
