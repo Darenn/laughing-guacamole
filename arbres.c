@@ -185,6 +185,10 @@ arbre arbre_creer(void (*_copier)(void *val, void **pt),
   assert(_copier != NULL);
   assert(_afficher != NULL);
   assert(_detruire != NULL);
+  arbre a = (arbre)malloc(sizeof(struct arbre_struct));
+  a->racine = NULL;
+  a->courant = NULL;
+  return a;
 }
 
 // Destruction compléte de l'arbre
