@@ -239,6 +239,14 @@ void arbre_afficher(arbre a, FILE *f) {
 void arbre_inserer_racine(arbre a, void *val) {
   assert(a != NULL);
   assert(val != NULL);
+  noeud racine = noeud_creer(val, a->copier);
+  // Si l'arbre a une racine, celle-ci devient le fils gauche de la nouvelle
+  // racine, qui elle même devient le père de l'ancienne racine
+  if (a->racine != NULL) {
+    racine->filsgauche = a->racine;
+    a->racine->pere = racine;
+  }
+  a->racine = racine;
 }
 
 // On ajoute un fils gauche à partir de courant
