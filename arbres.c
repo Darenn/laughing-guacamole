@@ -198,7 +198,10 @@ void arbre_detruire(arbre *a) {
 }
 
 // Initialisation de courant à la tete de l'arbre
-void arbre_init_courant(arbre a) { assert(a != NULL); }
+void arbre_init_courant(arbre a) {
+  assert(a != NULL);
+  a->courant = a->racine;
+}
 
 // On déplace courant sur son fils gauche
 void arbre_courant_filsgauche(arbre a) { assert(a != NULL); }
