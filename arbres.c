@@ -210,7 +210,10 @@ void arbre_courant_filsgauche(arbre a) {
 }
 
 // On déplace courant sur son père
-void arbre_courant_pere(arbre a) { assert(a != NULL); }
+void arbre_courant_pere(arbre a) {
+  assert(a != NULL);
+  a->courant = a->courant->pere;
+}
 
 // renvoie vrai si courant n'a pas de fils gauche
 bool arbre_courant_sans_filsgauche(arbre a) { assert(a != NULL); }
