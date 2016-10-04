@@ -131,8 +131,9 @@ void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f,
   assert(afficher != NULL);
   assert(f != NULL);
   if (n != NULL) {
+    if (n->pere != NULL)
+      fprintf(f, "%s", sep);
     afficher(n->val, f);
-    fprintf(f, "%s", sep);
     noeud_afficher(n->fils_gauche, afficher, f, sep);
     noeud_afficher(n->frere_droit, afficher, f, sep);
   }
@@ -288,6 +289,7 @@ arbre arbre_extraction(arbre a, void *val,
     arbreExtrait = arbre_creer(a->copier, a->detruire);
     // arbreExtrait->racine = (noeud)malloc(sizeof(struct noeud_struct));
     arbreExtrait->racine = *noeudRecherche;
+    arbreExtrait->racine->pere = NULL;
     *noeudRecherche = NULL;
   }
   return arbreExtrait;
