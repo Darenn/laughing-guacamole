@@ -326,10 +326,11 @@ void arbre_parcours_suivant(arbre_parcours p) {
   assert(p != NULL);
   if (p->courant->fils_gauche != NULL) {
     p->courant = p->courant->fils_gauche;
-  } else if (p->courant->frere_droit != NULL) {
-    p->courant = p->courant->frere_droit;
   } else {
-    p->courant = p->courant->pere->frere_droit;
+    while (p->courant->frere_droit == NULL) {
+      p->courant = p->courant->pere;
+    }
+    p->courant = p->courant->frere_droit;
   }
 }
 
