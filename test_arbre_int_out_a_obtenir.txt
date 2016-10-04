@@ -1,0 +1,21 @@
+racine = 24 
+insérer = 29 
+insérer = 15 
+insérer = 27 
+insérer = 10 
+insérer = 21 
+insérer = 25 
+insérer = 8 
+insérer = 2 
+insérer = 13 
+insérer = 15 
+24 : 29 : 15 : 27 : 21 : 25 : 8 : 2 : 13 : 15 : 10
+24 ( 29 , 15 ( 27 ( 21 , 25 ( 8 , 2 ( 13 , 15 ) ) ) , 10 ) )
+arbre extrait : 25 : 8 : 2 : 13 : 15
+25 ( 8 , 2 ( 13 , 15 ) )
+arbre restant : 24 : 29 : 15 : 27 : 21 : 10
+24 ( 29 , 15 ( 27 ( 21 ) , 10 ) )
+Somme arbre extrait : 63
+25 - 8 - 2 - 13 - 15
+Somme arbre restant : 126
+24 - 29 - 15 - 27 - 21 - 10

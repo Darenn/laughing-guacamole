@@ -1,20 +1,18 @@
-#ifndef XML
-#define XML
+# ifndef __XML_H
+# define __XML_H
+# define SIZE 50
+
+typedef struct balise_struct * balise ; 
+
+balise balise_creer ( char const * s ) ;
+
+void balise_detruire ( balise * x ) ; 
+
+bool est_egal_balise ( void * val1 , void * val2 ) ; 
+
+void afficher_balise ( void * val , FILE * f ) ; 
 
 
-typedef struct xml_struct* xml;
+arbre xml_construction_arbre ( char * source ) ; 
 
-xml xml_creer(char* s);
-bool xml_est_ouvrante(xml x);
-bool xml_est_fermante(xml x);
-void xml_detruire(xml* x);
-void xml_afficher(xml x, FILE* f);
-
-void copier_xml(void* val, void** ptr);
-void afficher_xml(void* val, FILE* f);
-void detruire_xml(void** ptr);
-bool est_egal_xml(void* val1, void* val2);
-
-void xml_construction(arbre a, FILE* f);
-arbre xml_construction_arbre(char* source);
-#endif
+# endif
