@@ -132,7 +132,7 @@ void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f,
   assert(f != NULL);
   if (n != NULL) {
     afficher(n->val, f);
-    fprintf(f, " %s ", sep);
+    fprintf(f, "%s", sep);
     noeud_afficher(n->fils_gauche, afficher, f, sep);
     noeud_afficher(n->frere_droit, afficher, f, sep);
   }
@@ -156,12 +156,11 @@ void noeud_afficher_tuple(noeud n, void (*afficher)(void *val, FILE *f),
     if (n->fils_gauche != NULL) {
       fprintf(f, " ( ");
       noeud_afficher_tuple(n->fils_gauche, afficher, f);
-      fprintf(f, " ) ");
+      fprintf(f, " )");
     }
     if (n->frere_droit) {
       fprintf(f, " , ");
       noeud_afficher_tuple(n->frere_droit, afficher, f);
-      fprintf(f, " , ");
     }
   }
 }
