@@ -132,9 +132,37 @@ void noeud_afficher(noeud n, void (*afficher)(void *val, FILE *f), FILE *f,
   assert(f != NULL);
   if (n != NULL) {
     afficher(n->val, f);
-    fputc((int)sep, f);
+    fprintf(f, " %s ", sep);
     noeud_afficher(n->fils_gauche, afficher, f, sep);
     noeud_afficher(n->frere_droit, afficher, f, sep);
+  }
+}
+
+/*!
+* \brief Affiche le sous-arbre ayant pour racine le noeud n sur le flux f avec
+* la fonction afficher.
+* \param n Le noeud qui sera la racine du sous-arbre que l'on souhaite afficher.
+* \param afficher Un pointeur vers une fonction qui affiche une valeur sur un
+* flux.
+* \param f Le flux sur lequel afficher le sous-arbre.
+* \pre Les paramètres afficher et f doivent être définis.
+*/
+void noeud_afficher_tuple(noeud n, void (*afficher)(void *val, FILE *f),
+                          FILE *f) {
+  assert(afficher != NULL);
+  assert(f != NULL);
+  if (n != NULL) {
+    afficher(n->val, f);
+    if (n->fils_gauche != NULL) {
+      fprintf(f, " ( ");
+      noeud_afficher_tuple(n->fils_gauche, afficher, f);
+      fprintf(f, " ) ");
+    }
+    if (n->frere_droit) {
+      fprintf(f, " , ");
+      noeud_afficher_tuple(n->frere_droit, afficher, f);
+      fprintf(f, " , ");
+    }
   }
 }
 
@@ -226,7 +254,7 @@ void arbre_afficher(arbre a, FILE *f, void (*afficher)(void *val, FILE *f),
   assert(NULL != a);
   assert(NULL != f);
   assert(NULL != afficher);
-  noeud_afficher(a->racine, f, afficher, sep);
+  noeud_afficher(a->racine, afficher, f, sep);
   fputc('\n', f);
 }
 
@@ -237,7 +265,7 @@ void arbre_afficher_tuple(arbre a, FILE *f,
   assert(NULL != a);
   assert(NULL != f);
   assert(NULL != afficher);
-  noeud_afficher_tuple(a->racine, f, afficher);
+  noeud_afficher_tuple(a->racine, afficher, f);
   fputc('\n', f);
 }
 
@@ -262,9 +290,7 @@ arbre arbre_extraction(arbre a, void *val,
     // arbreExtrait->racine = (noeud)malloc(sizeof(struct noeud_struct));
     arbreExtrait->racine = *noeudRecherche;
     *noeudRecherche = NULL;
-    arbre_init_courant(arbreExtrait);
   }
-  arbre_init_courant(a);
   return arbreExtrait;
 }
 
@@ -274,16 +300,38 @@ struct arbre_parcours_struct {
   noeud courant; // vaut NULL quand le parcours est fini
 };
 
-arbre_parcours arbre_creer_parcours(arbre a) { return NULL; }
+arbre_parcours arbre_creer_parcours(arbre a) {
+  assert(a != NULL);
+  arbre_parcours ap =
+      (arbre_parcours)malloc(sizeof(struct arbre_parcours_struct));
+  ap->a = a;
+  ap->courant = NULL;
+  return ap;
+}
 
-void arbre_parcours_detruire(arbre_parcours p) {}
+void arbre_parcours_detruire(arbre_parcours p) {
+  assert(p != NULL);
+  free(p);
+}
 
-bool arbre_parcours_est_fini(arbre_parcours p) { return true; }
+bool arbre_parcours_est_fini(arbre_parcours p) {
+  assert(p != NULL);
+  return p->courant == NULL;
+}
 
 // 1er fils
 // puis frère à droite
 // puis frère à droite du premier en ancestre ayant un
-void arbre_parcours_suivant(arbre_parcours p) {}
+void arbre_parcours_suivant(arbre_parcours p) {
+  assert(p != NULL);
+  if (p->courant->fils_gauche != NULL) {
+    p->courant = p->courant->fils_gauche;
+  } else if (p->courant->frere_droit != NULL) {
+    p->courant = p->courant->frere_droit;
+  } else {
+    p->courant = p->courant->pere->frere_droit;
+  }
+}
 
 void *arbre_parcours_valeur(arbre_parcours p) { return NULL; }
 
