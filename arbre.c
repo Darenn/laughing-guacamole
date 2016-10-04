@@ -70,8 +70,8 @@ noeud noeud_creer(void *val, void (*copier)(void *val, void **ptr)) {
 * \param copier Un pointeur vers une fonction qui permet de copier une valeur.
 * \pre Les paramètres doivent être définis.
 */
-void noeud_ajouter_fils_gauche(noeud n, void *val,
-                               void (*copier)(void *val, void **ptr)) {
+void noeud_ajouter_fils_a_gauche(noeud n, void *val,
+                                 void (*copier)(void *val, void **ptr)) {
   assert(NULL != n);
   assert(copier != NULL);
   noeud fg = noeud_creer(val, copier);
@@ -88,8 +88,8 @@ void noeud_ajouter_fils_gauche(noeud n, void *val,
 * \param copier Un pointeur vers une fonction qui permet de copier une valeur.
 * \pre Les paramètres doivent être définis.
 */
-void noeud_ajouter_frere_droit(noeud n, void *val,
-                               void (*copier)(void *val, void **ptr)) {
+void noeud_ajouter_frere_a_droite(noeud n, void *val,
+                                  void (*copier)(void *val, void **ptr)) {
   assert(NULL != n);
   assert(copier != NULL);
   noeud fd = noeud_creer(val, copier);
@@ -112,9 +112,9 @@ void noeud_ajouter_fils(noeud n, void *val,
   assert(NULL != n);
   assert(copier != NULL);
   if (n->fils_gauche == NULL)
-    noeud_ajouter_fils_gauche(n, val, copier);
+    noeud_ajouter_fils_a_gauche(n, val, copier);
   else
-    noeud_ajouter_frere_droit(n->fils_gauche, val, copier);
+    noeud_ajouter_frere_a_droite(n->fils_gauche, val, copier);
 }
 
 /*!
@@ -305,7 +305,7 @@ arbre_parcours arbre_creer_parcours(arbre a) {
   arbre_parcours ap =
       (arbre_parcours)malloc(sizeof(struct arbre_parcours_struct));
   ap->a = a;
-  ap->courant = NULL;
+  ap->courant = a->racine;
   return ap;
 }
 
@@ -327,14 +327,17 @@ void arbre_parcours_suivant(arbre_parcours p) {
   if (p->courant->fils_gauche != NULL) {
     p->courant = p->courant->fils_gauche;
   } else {
-    while (p->courant->frere_droit == NULL) {
+    while (p->courant->frere_droit == NULL && p->courant->pere != NULL) {
       p->courant = p->courant->pere;
     }
     p->courant = p->courant->frere_droit;
   }
 }
 
-void *arbre_parcours_valeur(arbre_parcours p) { return NULL; }
+void *arbre_parcours_valeur(arbre_parcours p) {
+  assert(p != NULL);
+  return p->courant->val;
+}
 
 bool arbre_parcours_a_fils(arbre_parcours p) {
   assert(!arbre_parcours_est_fini(p));
@@ -346,11 +349,21 @@ void arbre_parcours_aller_fils_gauche(arbre_parcours p) {
   p->courant = p->courant->fils_gauche;
 }
 
-void arbre_parcours_aller_fils_droite(arbre_parcours p) {}
+void arbre_parcours_aller_fils_droite(arbre_parcours p) {
+  assert(p != NULL);
+  p->courant = p->courant->fils_gauche;
+  while (p->courant->frere_droit != NULL) {
+    p->courant = p->courant->frere_droit;
+  }
+}
 
-bool arbre_parcours_a_frere_droit(arbre_parcours p) { return false; }
+bool arbre_parcours_a_frere_droit(arbre_parcours p) {
+  return p->courant->frere_droit != NULL;
+}
 
-void arbre_parcours_aller_frere_droit(arbre_parcours p) {}
+void arbre_parcours_aller_frere_droit(arbre_parcours p) {
+  p->courant = p->courant->frere_droit;
+}
 
 bool arbre_parcours_a_pere(arbre_parcours p) {
   assert(!arbre_parcours_est_fini(p));
