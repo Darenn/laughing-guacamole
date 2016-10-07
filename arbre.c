@@ -282,15 +282,11 @@ arbre arbre_extraction(arbre a, void *val,
   noeud *noeudRecherche = noeud_rechercher(&(a)->racine, val, est_egal);
   arbre arbreExtrait = NULL;
   if (noeudRecherche != NULL) {
-    // Je créé un nouveau pointeur de struct_noeud (racine de arbre extrait),
-    // j'y mets le contenu du pointeur vers le noeud recherché, et enfin je met
-    // le pointeur vers le noeud recherché à NULL pour que l'arbre de base n'ai
-    // plus de référence vers lui
     arbreExtrait = arbre_creer(a->copier, a->detruire);
-    // arbreExtrait->racine = (noeud)malloc(sizeof(struct noeud_struct));
     arbreExtrait->racine = *noeudRecherche;
     arbreExtrait->racine->pere = NULL;
-    *noeudRecherche = NULL;
+    *noeudRecherche = arbreExtrait->racine->frere_droit;
+    arbreExtrait->racine->frere_droit = NULL;
   }
   return arbreExtrait;
 }
