@@ -306,7 +306,9 @@ arbre_parcours arbre_creer_parcours(arbre a) {
   arbre_parcours ap =
       (arbre_parcours)malloc(sizeof(struct arbre_parcours_struct));
   ap->a = a;
-  ap->courant = a->racine;
+  if (a->racine != NULL)
+    ap->courant = a->racine;
+  ap->courant = NULL;
   return ap;
 }
 

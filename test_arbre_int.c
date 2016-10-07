@@ -37,10 +37,12 @@ void sommer(void *val, va_list vl) {
 
 void afficher_int_separes(void *val, va_list vl) {
   FILE *file = va_arg(vl, FILE *);
-  bool interne = va_arg(vl, int);
+  bool *estPremier = va_arg(vl, bool *);
+  if (*estPremier)
+    *estPremier = false;
+  else
+    fprintf(file, " - ");
   afficher_int(val, file);
-  if (interne)
-    fprintf(file, "%s", " - ");
 }
 
 int main(void) {
@@ -91,8 +93,8 @@ int main(void) {
   arbre_parcourir(a_extrait, sommer, &s_ext);
   fprintf(f_out, "Somme arbre extrait : %d\n", s_ext);
 
-  bool interne = false;
-  arbre_parcourir(a_extrait, afficher_int_separes, f_out, &interne);
+  bool estPremier = true;
+  arbre_parcourir(a_extrait, afficher_int_separes, f_out, &estPremier);
   fputc('\n', f_out);
 
   arbre_detruire(&a_extrait);
@@ -101,8 +103,8 @@ int main(void) {
   arbre_parcourir(a, sommer, &s_res);
   fprintf(f_out, "Somme arbre restant : %d\n", s_res);
 
-  interne = false;
-  arbre_parcourir(a, afficher_int_separes, f_out, &interne);
+  estPremier = true;
+  arbre_parcourir(a, afficher_int_separes, f_out, &estPremier);
   fputc('\n', f_out);
 
   arbre_detruire(&a);
