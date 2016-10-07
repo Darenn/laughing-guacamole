@@ -308,7 +308,8 @@ arbre_parcours arbre_creer_parcours(arbre a) {
   ap->a = a;
   if (a->racine != NULL)
     ap->courant = a->racine;
-  ap->courant = NULL;
+  else
+    ap->courant = NULL;
   return ap;
 }
 
