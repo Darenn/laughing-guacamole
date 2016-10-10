@@ -28,6 +28,7 @@ balise balise_creer(char const *st) {
   assert(nom != NULL);
   // Copie du string passé en parametre
   strncpy(nom, st, strlen(st) - 1);
+  nom[strlen(st) - 1] = 0;
   // Si c'est une balise fermante
   if (*(nom + 1) == '/') {
     b->type = fermante;
@@ -117,7 +118,9 @@ arbre xml_construction_arbre(char *source) {
   assert(a != NULL);
   // Ajout de la racine
   fscanf(fp, "%1023s", line);
-  arbre_inserer_racine(a, balise_creer(line));
+  balise racine = balise_creer(line);
+  arbre_inserer_racine(a, racine);
+  balise_detruire(&racine);
   // Le parcour
   arbre_parcours ap = arbre_creer_parcours(a);
   assert(ap != NULL);
@@ -133,10 +136,12 @@ arbre xml_construction_arbre(char *source) {
       arbre_parcours_ajouter_fils_a_droite(ap, b);
       arbre_parcours_aller_fils_droite(ap);
     }
+    balise_detruire(&b);
   }
 
   // Fermeture du fichier
   fclose(fp);
+  arbre_parcours_detruire(ap);
   // On retourne l'arbre
   return a;
 }
